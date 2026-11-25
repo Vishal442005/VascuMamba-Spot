@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Datasets & Cached Features (NEVER commit licensed datasets)
+/data/
+/datasets/
+/cache/
+/features_cache/
+*.h5
+*.hdf5
+*.zarr/
+*.mp4
+*.avi
+*.mkv
+
+# Checkpoints & Logs
+outputs/
+runs/
+checkpoints/
+wandb/
+*.pt
+*.pth
+*.ckpt
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+
+# OS
+.DS_Store
+Thumbs.db

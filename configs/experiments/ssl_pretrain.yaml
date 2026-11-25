@@ -1,0 +1,12 @@
+experiment: ssl_pretrain
+seed: 42
+epochs: 40
+batch_size: 8
+lr: 5.0e-4
+weight_decay: 1.0e-2
+mask_ratio_kin: 0.30
+mask_ratio_phys: 0.30
+mask_span_frames: 8
+lambda_recon_kin: 1.0
+lambda_recon_phys: 1.0
+lambda_nce_ssl: 0.5

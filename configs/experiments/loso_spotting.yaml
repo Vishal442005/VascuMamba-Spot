@@ -1,0 +1,31 @@
+experiment: loso_spotting
+seed: 42
+seeds: [42, 101, 2026]
+epochs: 60
+batch_size: 4
+lr: 3.0e-4
+weight_decay: 1.0e-2
+warmup_epochs: 5
+grad_clip_norm: 1.0
+modality_dropout:
+  p_drop_kin: 0.15
+  p_drop_phys: 0.25
+temporal_warp:
+  enabled: true
+  scale_range: [0.85, 1.15]
+loss_weights:
+  lambda_apex: 1.0
+  lambda_iou: 1.5
+  lambda_nce: 0.5
+  lambda_cls: 1.0
+  focal_gamma: 2.0
+  class_balance_beta: 0.99
+postprocess:
+  apex_threshold: 0.35
+  me_min_sec: 0.04
+  me_max_sec: 0.50
+  mae_min_sec: 0.50
+  mae_max_sec: 4.00
+  soft_nms_iou_thresh: 0.40
+  soft_nms_sigma: 0.50
+  physio_weight_beta: 0.50

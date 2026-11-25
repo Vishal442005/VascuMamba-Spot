@@ -1,0 +1,22 @@
+dataset: smic
+subsets:
+  hs:
+    color_mode: rgb
+    fps: 100.0
+    target_delta_tau_sec: 0.020
+  vis:
+    color_mode: rgb
+    fps: 25.0
+    target_delta_tau_sec: 0.040
+  nir:
+    color_mode: nir
+    fps: 25.0
+    target_delta_tau_sec: 0.040
+task_type: clipped_recognition
+num_subjects: 16
+target_physical_hz: 50.0
+emotion_scheme: 3cls
+classes: [negative, positive, surprise]
+canonical_classes_3: [negative, positive, surprise]
+spotting_enabled: false
+has_biopac: false

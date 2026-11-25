@@ -1,0 +1,56 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=0.75in]{geometry}
+
+\newtheorem{proposition}{Proposition}
+
+\title{\textbf{Supplementary Material: VascuMamba-Spot}}
+\author{VascuMamba-Spot Authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Formal Proofs}
+
+\begin{proposition}[Exponential Blink Suppression Under Null Autonomic Arousal]
+Let $A = -\mu I - \exp(A_{\log}) \preceq -\mu I$ ($\mu > 0$) be the diagonal continuous-time state matrix, and suppose a non-emotional facial motion artifact (e.g., spontaneous eyeblink of duration $T_b$) induces bounded kinematic input $\|x_t^{\mathrm{kin}}\|_2 \le M_k$ while the effective autonomic gate satisfies $g_t^{\mathrm{eff}} \le \epsilon$ ($0 < \epsilon \ll 1$). Under multiplicative gating
+\[
+\Delta_t^{\mathrm{kin}} \le \frac{\Delta t_f}{0.02}\,\epsilon\,\Delta_{\max}, \qquad \|B_t^{\mathrm{kin}}\|_2 \le \epsilon\,\|W_B\|_2,
+\]
+the Zero-Order Hold discretized transition satisfies $\bar{A}_t = \exp(\Delta_t^{\mathrm{kin}} A) \preceq I$ and $\|\bar{B}_t x_t^{\mathrm{kin}}\|_2 \le \Delta_t^{\mathrm{kin}} \|B_t^{\mathrm{kin}}\|_2 M_k = O(\epsilon^2)$. Summing the geometric recurrence over $T_b$ steps yields
+\[
+\|h_{t_0+T_b}^{\mathrm{blink}}\|_2 \le \frac{\epsilon^2 \Delta_{\max}' \|W_B\|_2 M_k}{\mu}\big(1 - \exp(-\mu \epsilon \Delta_{\max}' T_b)\big) = O(\epsilon^2),
+\]
+exponentially suppressing un-aroused blink activations relative to emotionally aroused micro-expressions where $g_t^{\mathrm{eff}} \approx 1$.
+\end{proposition}
+
+\begin{proposition}[First-Order Illumination and Melanin Invariance]
+Under the dichromatic reflection model $C_r(t) = I(t)(m_r \mathbf{u}_{\mathrm{mel}} + \mathbf{u}_{\mathrm{bvp}} p_r(t) + \mathbf{u}_{\mathrm{spec}} s_r(t))$, temporal normalization $\tilde{c}_r(t) = \mathrm{diag}(\bar{c}_r)^{-1}c_r(t) - \mathbf{1}$ eliminates static DC melanin scale factors $m_r$ and time-invariant illumination magnitude. Subsequent projection onto the Plane-Orthogonal-to-Skin (POS) basis $S_1 = \tilde{G} - \tilde{B}$, $S_2 = \tilde{G} + \tilde{B} - 2\tilde{R}$ cancels first-order broadband specular drift $\mathbf{u}_{\mathrm{spec}} \propto [1,1,1]^\top$.
+\end{proposition}
+
+\section{Benchmark Color-Space \& Protocol Summary}
+\begin{table}[h]
+\centering
+\caption{Dataset specifications respecting color-space integrity.}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Color & FPS & Task & BIOPAC \\
+\midrule
+CAS(ME)$^3$ & RGB-D & 30 & Spot+Rec & Yes \\
+CAS(ME)$^2$ & RGB & 30 & Spot+Rec & No \\
+CASME II & RGB & 200 & Clipped & No \\
+SMIC-HS/VIS & RGB & 100/25 & Clipped & No \\
+SAMM / SAMM-LV & Mono & 200 & Spot+Rec & No \\
+SMIC-NIR & NIR & 25 & Clipped & No \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Datasheet \& Ethics Statement}
+All experiments adhere strictly to official dataset End-User License Agreements (EULAs). Raw facial recordings are never redistributed; only open-source signal-processing, model, evaluation, and reproduction scripts are released. VascuMamba-Spot is strictly intended for consented affective computing and clinical research, never coercive surveillance.
+
+\end{document}

@@ -1,0 +1,4 @@
+# ABL-1: Kinematic-Only Mamba (no rPPG gating)
+model: vascumamba_abl1_kinematic_only
+kinematic_only: true
+use_autonomic_gate: false

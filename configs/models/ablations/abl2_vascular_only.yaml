@@ -1,0 +1,4 @@
+# ABL-2: Vascular-Only Mamba (no optical strain)
+model: vascumamba_abl2_vascular_only
+vascular_only: true
+use_autonomic_gate: false

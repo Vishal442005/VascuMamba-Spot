@@ -1,0 +1,14 @@
+dataset: casme3
+task_type: untrimmed_spotting_and_recognition
+color_mode: rgb
+fps: 30.0
+num_subjects: 100
+target_physical_hz: 30.0
+target_delta_tau_sec: 0.0333
+emotion_scheme: 7cls
+classes: [happiness, surprise, disgust, fear, sadness, anger, others]
+canonical_classes_3: [negative, positive, surprise]
+spotting_enabled: true
+has_biopac: true
+biopac_channels: [ECG, PPG, EDA, RSP]
+biopac_fs: 1000.0

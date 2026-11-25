@@ -1,0 +1,12 @@
+dataset: casme2
+task_type: clipped_recognition
+color_mode: rgb
+fps: 200.0
+num_subjects: 26
+target_physical_hz: 50.0
+target_delta_tau_sec: 0.015
+emotion_scheme: 5cls
+classes: [happiness, surprise, disgust, repression, others]
+canonical_classes_3: [negative, positive, surprise]
+spotting_enabled: false
+has_biopac: false

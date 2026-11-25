@@ -1,0 +1,18 @@
+model: vascumamba_base
+d_kin_in: 144      # 12 AU ROIs * 6 Cauchy strain channels * 2 (mean + std/peak pooling)
+d_phys_in: 36      # 7 vascular ROIs * 4 features + 7 SQI + 1 has_rgb
+d_model: 128
+d_state: 16
+d_conv: 4
+expand: 2
+num_layers: 4
+dropout: 0.15
+gate_floor_mono: 0.50
+delta_max: 1.0
+ssm_backend: auto  # auto | cuda_mamba | pure_torch
+bidirectional: true
+use_autonomic_gate: true
+kinematic_only: false
+vascular_only: false
+gating_mode: multiplicative  # multiplicative | additive | concat
+num_classes: 5

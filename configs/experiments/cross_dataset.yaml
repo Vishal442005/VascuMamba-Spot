@@ -1,0 +1,19 @@
+experiment: cross_dataset
+seed: 42
+transfers:
+  - name: casme3_to_casme_sq
+    source: casme3
+    target: casme_sq
+    task: spotting
+  - name: casme2_to_smic_hs
+    source: casme2
+    target: smic_hs
+    task: recognition_3cls
+  - name: casme2_to_smic_vis
+    source: casme2
+    target: smic_vis
+    task: recognition_3cls
+  - name: samm_lv_to_casme_sq
+    source: samm_lv
+    target: casme_sq
+    task: spotting

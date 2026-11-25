@@ -1,0 +1,12 @@
+dataset: casme_sq
+task_type: untrimmed_spotting_and_recognition
+color_mode: rgb
+fps: 30.0
+num_subjects: 22
+target_physical_hz: 30.0
+target_delta_tau_sec: 0.0333
+emotion_scheme: 4cls
+classes: [happiness, anger, disgust, others]
+canonical_classes_3: [negative, positive, surprise]
+spotting_enabled: true
+has_biopac: false

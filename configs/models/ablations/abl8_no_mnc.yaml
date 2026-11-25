@@ -1,0 +1,3 @@
+# ABL-8: Without Motion-Orthogonal Adaptive Noise Cancellation
+model: vascumamba_abl8_no_mnc
+use_mnc_filter: false
