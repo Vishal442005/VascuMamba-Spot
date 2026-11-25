@@ -5,6 +5,8 @@ from __future__ import annotations
 import torch
 import torch.nn as nn
 
+from vascumamba_spot.models.triton_scan import is_triton_mamba_available, triton_selective_scan
+
 
 def is_cuda_mamba_available() -> bool:
     """Return True if CUDA and mamba_ssm selective_scan_fn are available."""
@@ -19,14 +21,22 @@ def is_cuda_mamba_available() -> bool:
 
 
 def resolve_ssm_backend(requested: str = "auto") -> str:
-    """Resolve 'auto' into 'cuda_mamba' on CUDA+mamba_ssm or 'pure_torch' otherwise."""
+    """Resolve 'auto' into 'cuda_mamba', 'triton_mamba', or 'pure_torch'."""
     if requested == "pure_torch":
         return "pure_torch"
+    if requested == "triton_mamba":
+        if not is_triton_mamba_available():
+            raise RuntimeError("triton_mamba backend requested, but CUDA or Triton is unavailable.")
+        return "triton_mamba"
     if requested == "cuda_mamba":
         if not is_cuda_mamba_available():
             raise RuntimeError("cuda_mamba backend requested, but CUDA or mamba_ssm is unavailable.")
         return "cuda_mamba"
-    return "cuda_mamba" if is_cuda_mamba_available() else "pure_torch"
+    if is_cuda_mamba_available():
+        return "cuda_mamba"
+    if is_triton_mamba_available():
+        return "triton_mamba"
+    return "pure_torch"
 
 
 def zoh_discretize(
@@ -182,6 +192,9 @@ class SelectiveSSMCore(nn.Module):
         a_neg = self.negative_a()
         if self.backend == "cuda_mamba" and u.is_cuda and not return_final_state:
             y = cuda_mamba_selective_scan(u, delta, a_neg, b_proj, c_proj, self.d_skip)
+            return y, None
+        if self.backend == "triton_mamba" and u.is_cuda and not return_final_state:
+            y = triton_selective_scan(u, delta, a_neg, b_proj, c_proj, self.d_skip)
             return y, None
         return pure_torch_selective_scan(
             u, delta, a_neg, b_proj, c_proj, d_skip=self.d_skip, return_final_state=return_final_state

@@ -129,3 +129,37 @@ def test_parallel_scan_exactness_across_chunks() -> None:
     assert h_par is not None
     assert torch.allclose(y_par, y_seq, atol=1e-5, rtol=1e-5)
     assert torch.allclose(h_par, h, atol=1e-5, rtol=1e-5)
+
+
+def test_triton_gpu_parity_when_cuda_available() -> None:
+    """Verify fused Triton GPU scan forward and backward gradients match pure_torch on CUDA."""
+    from vascumamba_spot.models.triton_scan import is_triton_mamba_available, triton_selective_scan
+
+    if not is_triton_mamba_available():
+        return
+
+    torch.manual_seed(7)
+    bsz, seq_len, d_model, d_state = 2, 200, 32, 8
+    u1 = torch.randn(bsz, seq_len, d_model, device="cuda", requires_grad=True)
+    d1 = (torch.rand(bsz, seq_len, d_model, device="cuda") * 0.4 + 0.01).detach().requires_grad_(True)
+    a1 = (-0.1 - torch.rand(d_model, d_state, device="cuda")).detach().requires_grad_(True)
+    b1 = torch.randn(bsz, seq_len, d_state, device="cuda", requires_grad=True)
+    c1 = torch.randn(bsz, seq_len, d_state, device="cuda", requires_grad=True)
+    ds1 = torch.randn(d_model, device="cuda", requires_grad=True)
+
+    u2 = u1.detach().clone().requires_grad_(True)
+    d2 = d1.detach().clone().requires_grad_(True)
+    a2 = a1.detach().clone().requires_grad_(True)
+    b2 = b1.detach().clone().requires_grad_(True)
+    c2 = c1.detach().clone().requires_grad_(True)
+    ds2 = ds1.detach().clone().requires_grad_(True)
+
+    y_ref, _ = pure_torch_selective_scan(u1, d1, a1, b1, c1, d_skip=ds1)
+    y_tri = triton_selective_scan(u2, d2, a2, b2, c2, d_skip=ds2)
+    assert torch.allclose(y_tri, y_ref, atol=1e-4, rtol=1e-4)
+
+    y_ref.sum().backward()
+    y_tri.sum().backward()
+    for g_tri, g_ref in zip([u2.grad, d2.grad, a2.grad, b2.grad, c2.grad, ds2.grad], [u1.grad, d1.grad, a1.grad, b1.grad, c1.grad, ds1.grad]):
+        assert g_tri is not None and g_ref is not None
+        assert torch.allclose(g_tri, g_ref, atol=1e-3, rtol=1e-3)

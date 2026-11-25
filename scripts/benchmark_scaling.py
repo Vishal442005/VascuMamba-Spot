@@ -21,6 +21,9 @@ def measure_model(model: torch.nn.Module, seq_len: int, device: torch.device) ->
 
     with torch.no_grad():
         if device.type == "cuda":
+            # Warm up CUDA / Triton JIT compilation before timing
+            _ = model(xk, xp)
+            torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats(device)
             torch.cuda.synchronize()
             t0 = time.perf_counter()
